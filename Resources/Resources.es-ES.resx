@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- Textos de la aplicación -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>CSFormat - Procesador de Archivos</value>
+  </data>
+  <data name="SelectFormatFile" xml:space="preserve">
+    <value>Seleccionar archivo de formato</value>
+  </data>
+  <data name="SelectInputFile" xml:space="preserve">
+    <value>Seleccionar archivo de entrada</value>
+  </data>
+  <data name="SeparatorLabel" xml:space="preserve">
+    <value>Separador:</value>
+  </data>
+  <data name="HasHeaders" xml:space="preserve">
+    <value>Incluir encabezados</value>
+  </data>
+  <data name="ProcessButton" xml:space="preserve">
+    <value>Procesar</value>
+  </data>
+  <data name="CloseButton" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="FileFilter" xml:space="preserve">
+    <value>Archivos CSV|*.csv|Archivos de texto|*.txt|Todos los archivos|*.*</value>
+  </data>
+  <data name="ProcessComplete" xml:space="preserve">
+    <value>Proceso completado. Archivo guardado en: {0}</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>Archivo no encontrado: {0}</value>
+  </data>
+  <data name="InvalidFormat" xml:space="preserve">
+    <value>Formato de archivo no válido</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Procesando...</value>
+  </data>
+  <data name="SelectFileFirst" xml:space="preserve">
+    <value>Por favor seleccione un archivo primero</value>
+  </data>
+  <data name="EnterSeparator" xml:space="preserve">
+    <value>Por favor ingrese un separador</value>
+  </data>
+  <data name="NoFormatDefinitions" xml:space="preserve">
+    <value>No se encontraron definiciones de formato válidas</value>
+  </data>
+  <data name="InvalidLineFormat" xml:space="preserve">
+    <value>Formato de línea no válido: '{0}'</value>
+  </data>
+  <data name="FileEmpty" xml:space="preserve">
+    <value>El archivo está vacío o solo contiene líneas en blanco</value>
+  </data>
+  <data name="LinesProcessed" xml:space="preserve">
+    <value>Procesadas {0} de {1} líneas ({2}%)</value>
+  </data>
+  <data name="TotalLinesProcessed" xml:space="preserve">
+    <value>Total de líneas procesadas: {0}</value>
+  </data>
+  <data name="FieldDefinitionsFound" xml:space="preserve">
+    <value>Se encontraron {0} definiciones de campo:</value>
+  </data>
+  <data name="FieldDefinitionFormat" xml:space="preserve">
+    <value>- {0}: {1} caracteres</value>
+  </data>
+  <data name="FirstLinePreview" xml:space="preserve">
+    <value>Primera línea de entrada: '{0}'</value>
+  </data>
+  <data name="OutputFileVerified" xml:space="preserve">
+    <value>Archivo de salida verificado. Contiene {0} líneas.</value>
+  </data>
+  <data name="OutputFileError" xml:space="preserve">
+    <value>ERROR: No se pudo crear el archivo de salida</value>
+  </data>
+  
+  <!-- Elementos del menú -->
+  <data name="MenuSettings" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="MenuLanguage" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="MenuAbout" xml:space="preserve">
+    <value>Acerca de</value>
+  </data>
+  <data name="LanguageEnglish" xml:space="preserve">
+    <value>Inglés</value>
+  </data>
+  <data name="LanguageSpanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+</root>

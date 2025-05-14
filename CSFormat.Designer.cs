@@ -41,7 +41,14 @@ namespace CSFormat
             btnProcesar = new Button();
             chkTitulos = new CheckBox();
             progressBarProceso = new ProgressBar();
+            menuStrip1 = new MenuStrip();
+            configuracionToolStripMenuItem = new ToolStripMenuItem();
+            idiomaToolStripMenuItem1 = new ToolStripMenuItem();
+            espanolToolStripMenuItem1 = new ToolStripMenuItem();
+            inglesToolStripMenuItem1 = new ToolStripMenuItem();
+            acercaToolStripMenuItem = new ToolStripMenuItem();
             panelDatosEntrada.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // btnAbrirFormato
@@ -159,11 +166,58 @@ namespace CSFormat
             progressBarProceso.Size = new Size(425, 10);
             progressBarProceso.TabIndex = 9;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { configuracionToolStripMenuItem, acercaToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(535, 24);
+            menuStrip1.TabIndex = 10;
+            menuStrip1.Text = "menuStripFormat";
+            // 
+            // configuracionToolStripMenuItem
+            // 
+            configuracionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { idiomaToolStripMenuItem1 });
+            configuracionToolStripMenuItem.Name = "configuracionToolStripMenuItem";
+            configuracionToolStripMenuItem.Size = new Size(95, 20);
+            configuracionToolStripMenuItem.Text = "Configuracion";
+            // 
+            // idiomaToolStripMenuItem1
+            // 
+            idiomaToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { espanolToolStripMenuItem1, inglesToolStripMenuItem1 });
+            idiomaToolStripMenuItem1.Name = "idiomaToolStripMenuItem1";
+            idiomaToolStripMenuItem1.Size = new Size(111, 22);
+            idiomaToolStripMenuItem1.Text = "Idioma";
+            // 
+            // espanolToolStripMenuItem1
+            // 
+            espanolToolStripMenuItem1.Checked = true;
+            espanolToolStripMenuItem1.CheckState = CheckState.Checked;
+            espanolToolStripMenuItem1.Name = "espanolToolStripMenuItem1";
+            espanolToolStripMenuItem1.Size = new Size(115, 22);
+            espanolToolStripMenuItem1.Text = "Espanol";
+            espanolToolStripMenuItem1.Click += espanolToolStripMenuItem1_Click;
+            // 
+            // inglesToolStripMenuItem1
+            // 
+            inglesToolStripMenuItem1.Name = "inglesToolStripMenuItem1";
+            inglesToolStripMenuItem1.Size = new Size(115, 22);
+            inglesToolStripMenuItem1.Text = "Ingles";
+            inglesToolStripMenuItem1.Click += inglesToolStripMenuItem1_Click;
+            // 
+            // acercaToolStripMenuItem
+            // 
+            acercaToolStripMenuItem.Alignment = ToolStripItemAlignment.Right;
+            acercaToolStripMenuItem.Name = "acercaToolStripMenuItem";
+            acercaToolStripMenuItem.Size = new Size(24, 20);
+            acercaToolStripMenuItem.Text = "?";
+            acercaToolStripMenuItem.Click += acercaToolStripMenuItem_Click;
+            // 
             // CSFormat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(536, 342);
+            ClientSize = new Size(535, 342);
             Controls.Add(progressBarProceso);
             Controls.Add(lblSeparador);
             Controls.Add(textBoxSeparador);
@@ -172,11 +226,17 @@ namespace CSFormat
             Controls.Add(textBoxFormato);
             Controls.Add(lblFormato);
             Controls.Add(panelDatosEntrada);
+            Controls.Add(menuStrip1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MainMenuStrip = menuStrip1;
             MaximizeBox = false;
             Name = "CSFormat";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "CSFormat";
             panelDatosEntrada.ResumeLayout(false);
             panelDatosEntrada.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -200,5 +260,11 @@ namespace CSFormat
 
         private CheckBox chkTitulos;
         private ProgressBar progressBarProceso;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem configuracionToolStripMenuItem;
+        private ToolStripMenuItem idiomaToolStripMenuItem1;
+        private ToolStripMenuItem espanolToolStripMenuItem1;
+        private ToolStripMenuItem inglesToolStripMenuItem1;
+        private ToolStripMenuItem acercaToolStripMenuItem;
     }
 }
