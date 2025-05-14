@@ -46,30 +46,59 @@ namespace CSFormat
             Close();
         }
 
+        private (bool IsValid, string? ErrorMessage) ValidateInputs(string? formato, string? entrada, string? separador)
+        {
+            return (formato, entrada, separador) switch
+            {
+                (null or "" or { Length: 0 }, _, _) => 
+                    (false, "Por favor seleccione un archivo de formato."),
+                (var f, _, _) when !File.Exists(f) => 
+                    (false, "El archivo de formato no existe."),
+                (_, null or "" or { Length: 0 }, _) => 
+                    (false, "Por favor seleccione un archivo de entrada."),
+                (_, var i, _) when !File.Exists(i) => 
+                    (false, "El archivo de entrada no existe."),
+                (_, _, null or "" or { Length: 0 }) => 
+                    (false, "Por favor ingrese un carácter separador."),
+                _ => (true, string.Empty)
+            };
+        }
+
+        private void UpdateProgressBar(int percent, ProgressBar progressBar)
+        {
+            if (progressBar.InvokeRequired)
+            {
+                progressBar.Invoke(new Action(() => 
+                    progressBar.Value = Math.Min(percent, progressBar.Maximum)));
+            }
+            else
+            {
+                progressBar.Value = Math.Min(percent, progressBar.Maximum);
+            }
+        }
+
+        private void SetProgressBarVisibility(ProgressBar progressBar, bool isVisible)
+        {
+            if (progressBar.InvokeRequired)
+            {
+                progressBar.Invoke(new Action(() => progressBar.Visible = isVisible));
+            }
+            else
+            {
+                progressBar.Visible = isVisible;
+            }
+        }
+
         private void BtnProcesar_Click(object? sender, EventArgs e)
         {
             try
             {
                 var (formato, entrada, separador) = (textBoxFormato.Text, textBoxEntrada.Text, textBoxSeparador.Text);
                 
-                var (isValid, errorMessage) = (formato, entrada, separador) switch
+                var validation = ValidateInputs(formato, entrada, separador);
+                if (!validation.IsValid)
                 {
-                    (null or "" or { Length: 0 }, _, _) => 
-                        (false, "Por favor seleccione un archivo de formato."),
-                    (var f, _, _) when !File.Exists(f) => 
-                        (false, "El archivo de formato no existe."),
-                    (_, null or "" or { Length: 0 }, _) => 
-                        (false, "Por favor seleccione un archivo de entrada."),
-                    (_, var i, _) when !File.Exists(i) => 
-                        (false, "El archivo de entrada no existe."),
-                    (_, _, null or "" or { Length: 0 }) => 
-                        (false, "Por favor ingrese un carácter separador."),
-                    _ => (true, string.Empty)
-                };
-
-                if (!isValid)
-                {
-                    MessageBox.Show(errorMessage, "Error de validación", 
+                    MessageBox.Show(validation.ErrorMessage, "Error de validación", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -79,45 +108,14 @@ namespace CSFormat
 
                 try
                 {
-                    var progress = new Progress<int>(percent =>
-                    {
-                        if (progressBarProceso.InvokeRequired)
-                        {
-                            progressBarProceso.Invoke(new Action(() => 
-                                progressBarProceso.Value = Math.Min(percent, progressBarProceso.Maximum)));
-                        }
-                        else
-                        {
-                            progressBarProceso.Value = Math.Min(percent, progressBarProceso.Maximum);
-                        }
-                    });
+                    var progress = new Progress<int>(percent => 
+                        UpdateProgressBar(percent, progressBarProceso));
 
-                    var fileProcessor = new FileProcessor(progress);
-                    
-                    // Asegurarse de que los valores no sean nulos
-                    string nonNullFormato = formato ?? throw new ArgumentNullException(nameof(formato));
-                    string nonNullEntrada = entrada ?? throw new ArgumentNullException(nameof(entrada));
-                    string nonNullSeparador = separador ?? throw new ArgumentNullException(nameof(separador));
-                    
-                    string outputFile = fileProcessor.ProcessFile(
-                        formatFilePath: nonNullFormato,
-                        inputFilePath: nonNullEntrada,
-                        separator: nonNullSeparador,
-                        hasTitles: chkTitulos.Checked);
-
-                    MessageBox.Show($"Archivo procesado correctamente.\nGuardado en: {outputFile}", 
-                        "Proceso completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ProcessFileWithProgress(progress, formato!, entrada!, separador!);
                 }
                 finally
                 {
-                    if (progressBarProceso.InvokeRequired)
-                    {
-                        progressBarProceso.Invoke(new Action(() => progressBarProceso.Visible = false));
-                    }
-                    else
-                    {
-                        progressBarProceso.Visible = false;
-                    }
+                    SetProgressBarVisibility(progressBarProceso, false);
                 }
             }
             catch (Exception ex)
@@ -125,6 +123,20 @@ namespace CSFormat
                 MessageBox.Show($"Error al procesar los archivos: {ex.Message}", "Error", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ProcessFileWithProgress(IProgress<int> progress, string formato, string entrada, string separador)
+        {
+            var fileProcessor = new FileProcessor(progress);
+            
+            string outputFile = fileProcessor.ProcessFile(
+                formatFilePath: formato,
+                inputFilePath: entrada,
+                separator: separador,
+                hasTitles: chkTitulos.Checked);
+
+            MessageBox.Show($"Archivo procesado correctamente.\nGuardado en: {outputFile}", 
+                "Proceso completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

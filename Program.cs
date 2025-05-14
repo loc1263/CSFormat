@@ -5,8 +5,21 @@ namespace CSFormat
         [STAThread]
         static void Main()
         {
+            InitializeApplication();
+            RunApplication();
+        }
+
+        private static void InitializeApplication()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             ApplicationConfiguration.Initialize();
-            Application.Run(new CSFormat());
+        }
+
+        private static void RunApplication()
+        {
+            using var mainForm = new CSFormat();
+            Application.Run(mainForm);
         }
     }
 }
