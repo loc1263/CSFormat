@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Windows.Forms;
+
 namespace CSFormat
 {
     public partial class CSFormat : Form
@@ -5,7 +9,6 @@ namespace CSFormat
         public CSFormat()
         {
             InitializeComponent();
-            // Assign the click event handlers
             btnAbrirFormato.Click += BtnAbrirFormato_Click;
             btnAbrirInput.Click += BtnAbrirInput_Click;
             btnCerrar.Click += BtnCerrar_Click;
@@ -40,9 +43,8 @@ namespace CSFormat
 
         private void BtnCerrar_Click(object? sender, EventArgs e)
         {
-            Application.Exit();
+            Close();
         }
-
 
         private void BtnProcesar_Click(object? sender, EventArgs e)
         {
@@ -58,60 +60,50 @@ namespace CSFormat
                         (false, "El archivo de formato no existe."),
                     (_, null or "" or { Length: 0 }, _) => 
                         (false, "Por favor seleccione un archivo de entrada."),
-                    (_, var inputFile, _) when !File.Exists(inputFile) => 
+                    (_, var i, _) when !File.Exists(i) => 
                         (false, "El archivo de entrada no existe."),
                     (_, _, null or "" or { Length: 0 }) => 
-                        (false, "El separador no puede estar vacío."),
+                        (false, "Por favor ingrese un carácter separador."),
                     _ => (true, string.Empty)
                 };
 
                 if (!isValid)
                 {
-                    MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(errorMessage, "Error de validación", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                bool includeHeaders = chkTitulos.Checked;
-                Console.WriteLine($"Incluir encabezados: {includeHeaders}");
-                
-                // Configurar la barra de progreso
-                progressBarProceso.Value = 0;
                 progressBarProceso.Visible = true;
-                
+                progressBarProceso.Style = ProgressBarStyle.Marquee;
+
                 try
                 {
-                    // Crear un Progress para reportar el progreso
                     var progress = new Progress<int>(percent =>
                     {
-                        // Asegurarse de que la actualización de la UI se haje en el hilo correcto
                         if (progressBarProceso.InvokeRequired)
                         {
-                            progressBarProceso.Invoke(new Action(() => progressBarProceso.Value = percent));
+                            progressBarProceso.Invoke(new Action(() => 
+                                progressBarProceso.Value = Math.Min(percent, progressBarProceso.Maximum)));
                         }
                         else
                         {
-                            progressBarProceso.Value = percent;
+                            progressBarProceso.Value = Math.Min(percent, progressBarProceso.Maximum);
                         }
                     });
-                    
-                    // Crear el procesador de archivos con el reporte de progreso
+
                     var fileProcessor = new FileProcessor(progress);
-                    
-                    // Procesar el archivo (esto puede tardar)
                     string outputFile = fileProcessor.ProcessFile(
-                        textBoxFormato.Text, 
-                        textBoxEntrada.Text, 
-                        textBoxSeparador.Text, 
-                        includeHeaders);
-                    
-                    MessageBox.Show($"Archivo procesado exitosamente.\nGuardado como: {outputFile}", 
-                        "Proceso Completado", 
-                        MessageBoxButtons.OK, 
-                        MessageBoxIcon.Information);
+                        formatFilePath: formato,
+                        inputFilePath: entrada,
+                        separator: separador,
+                        hasTitles: chkTitulos.Checked);
+
+                    MessageBox.Show($"Archivo procesado correctamente.\nGuardado en: {outputFile}", 
+                        "Proceso completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 finally
                 {
-                    // Asegurarse de que la barra de progreso se oculte al finalizar
                     if (progressBarProceso.InvokeRequired)
                     {
                         progressBarProceso.Invoke(new Action(() => progressBarProceso.Visible = false));
@@ -128,15 +120,5 @@ namespace CSFormat
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private string ProcessFile(string formatFilePath, string inputFilePath, string separator, bool hasTitles)
-        {
-            // Este método ya no se usa directamente, pero lo mantenemos por compatibilidad
-            // El procesamiento ahora se maneja desde BtnProcesar_Click
-            var processor = new FileProcessor(null);
-            return processor.ProcessFile(formatFilePath, inputFilePath, separator, hasTitles);
-        }
-
-
     }
 }

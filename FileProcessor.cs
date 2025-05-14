@@ -8,7 +8,7 @@ namespace CSFormat
 {
     public class FileProcessor
     {
-        private const int BufferSize = 4096; // Tamaño del búfer para lectura de archivos grandes
+        private const int BufferSize = 4096;
         private readonly IProgress<int>? _progress;
 
         public FileProcessor(IProgress<int>? progress = null)
@@ -18,30 +18,23 @@ namespace CSFormat
 
         public string ProcessFile(string formatFilePath, string inputFilePath, string separator, bool hasTitles)
         {
-            // Leer y validar el archivo de formato
             var fieldDefinitions = ReadFormatFile(formatFilePath);
-            
-            // Procesar el archivo de entrada y escribir el de salida
             string outputFilePath = GetOutputFilePath(inputFilePath);
             
-            // Usar StreamWriter con StringBuilder para escritura eficiente
             using (var writer = new StreamWriter(outputFilePath, false, Encoding.UTF8, BufferSize))
             {
-                // Escribir encabezados si es necesario
                 if (hasTitles)
                 {
                     var headerLine = string.Join(separator, fieldDefinitions.Select(f => f.name));
                     writer.WriteLine(headerLine);
                 }
 
-                // Contar el total de líneas para el progreso
                 int totalLines = File.ReadLines(inputFilePath).Count(line => !string.IsNullOrWhiteSpace(line.Trim()));
                 if (totalLines == 0)
                 {
                     throw new Exception("El archivo de entrada está vacío o solo contiene líneas en blanco.");
                 }
 
-                // Procesar y escribir líneas del archivo de entrada
                 int lineCount = 0;
                 int lastReportedPercentage = -1;
 
@@ -53,14 +46,12 @@ namespace CSFormat
                         writer.WriteLine(formattedLine);
                         lineCount++;
                         
-                        // Reportar progreso (solo si cambió el porcentaje)
                         int percentage = (int)((double)lineCount / totalLines * 100);
                         if (percentage != lastReportedPercentage)
                         {
                             _progress?.Report(percentage);
                             lastReportedPercentage = percentage;
                             
-                            // Mostrar progreso en consola cada 5% o cada 1000 líneas
                             if (percentage % 5 == 0 || lineCount % 1000 == 0)
                             {
                                 Console.WriteLine($"Procesadas {lineCount} de {totalLines} líneas ({percentage}%)");
@@ -72,9 +63,7 @@ namespace CSFormat
                 Console.WriteLine($"Total de líneas procesadas: {lineCount}");
             }
 
-            // Verificar el archivo de salida
             VerifyOutputFile(outputFilePath);
-            
             return outputFilePath;
         }
 
@@ -146,7 +135,6 @@ namespace CSFormat
                     outputFields.Add(string.Empty);
                     continue;
                 }
-
 
                 int actualLength = Math.Min(length, line.Length - currentPosition);
                 string fieldValue = line.Substring(currentPosition, actualLength).Trim();
