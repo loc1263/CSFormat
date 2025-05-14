@@ -93,10 +93,16 @@ namespace CSFormat
                     });
 
                     var fileProcessor = new FileProcessor(progress);
+                    
+                    // Asegurarse de que los valores no sean nulos
+                    string nonNullFormato = formato ?? throw new ArgumentNullException(nameof(formato));
+                    string nonNullEntrada = entrada ?? throw new ArgumentNullException(nameof(entrada));
+                    string nonNullSeparador = separador ?? throw new ArgumentNullException(nameof(separador));
+                    
                     string outputFile = fileProcessor.ProcessFile(
-                        formatFilePath: formato,
-                        inputFilePath: entrada,
-                        separator: separador,
+                        formatFilePath: nonNullFormato,
+                        inputFilePath: nonNullEntrada,
+                        separator: nonNullSeparador,
                         hasTitles: chkTitulos.Checked);
 
                     MessageBox.Show($"Archivo procesado correctamente.\nGuardado en: {outputFile}", 
